@@ -49,9 +49,6 @@ struct CyclesSolverState {
   ~CyclesSolverState()
   {
     BLI_stack_free(traversal_stack);
-    if (num_cycles != 0) {
-      printf("Detected %d dependency cycles\n", num_cycles);
-    }
   }
   Depsgraph *graph;
   BLI_Stack *traversal_stack;
@@ -174,7 +171,6 @@ void solve_cycles(CyclesSolverState *state)
                          current->via_relation->name + "'\n";
             current = current->from;
           }
-          printf("Dependency cycle detected:\n%s", cycle_str.c_str());
           Relation *sacrificial_relation = select_relation_to_murder(rel, entry);
           sacrificial_relation->flag |= RELATION_FLAG_CYCLIC;
           ++state->num_cycles;
